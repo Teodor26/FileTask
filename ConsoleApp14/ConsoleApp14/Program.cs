@@ -17,6 +17,8 @@ namespace ConsoleApp14
             File.Delete(Path1);
             File.Delete(Path2);
 
+            
+
             Person jim = new Person();
             jim.Name = "Jim";
             jim.Age = 20;
@@ -39,29 +41,34 @@ namespace ConsoleApp14
             SetFromFile<Person>(jim);
             SetFromFile<Car>(tesla);
             SetFromFile<Animal>(cat);
-          
+
+
+            CreateObjects();
+
+
             Console.ReadLine();
 
             
 
-        }
-
-        
+        }        
 
         public static string Path = @"C:\Homework\Person.txt";
         public static string Path1 = @"C:\Homework\Animal.txt";
         public static string Path2 = @"C:\Homework\Car.txt";
-
 
         public static void SetAllProp<T>(T obj)
         {
             var className = nameof(T);
             var objpath = $"{Path}{className}.txt";
 
+
             foreach (var prop in obj.GetType().GetProperties())
             {
                 var value = prop.GetValue(obj, null);
-                string str = $" {prop.Name}: {value} ";
+
+
+
+                string str = $"{obj.GetType().Name} {prop.Name}: {value} ";
                 str = str + Environment.NewLine;
 
                 if (obj.GetType() == typeof(Person))
@@ -78,23 +85,44 @@ namespace ConsoleApp14
         {
             if (obj.GetType() == typeof(Person))
             {
-                string text = File.ReadAllText(@"C:\Homework\Person.txt", Encoding.UTF8);                
-                Console.WriteLine("Текст из файла: {0}", text);
+                string text = File.ReadAllText(Path, Encoding.UTF8);                
+                Console.WriteLine("{0}", text);
                
             }
             else if (obj.GetType() == typeof(Animal))
             {
-                string text = File.ReadAllText(@"C:\Homework\Animal.txt", Encoding.UTF8);
-                Console.WriteLine("Текст из файла: {0}", text);
+                string text = File.ReadAllText(Path1, Encoding.UTF8);
+                Console.WriteLine("{0}", text);
                
             }
             else if (obj.GetType() == typeof(Car))
             {
-                string text = File.ReadAllText(@"C:\Homework\Car.txt", Encoding.UTF8);
-                Console.WriteLine("Текст из файла: {0}", text);
+                string text = File.ReadAllText(Path2, Encoding.UTF8);
+                Console.WriteLine("{0}", text);
                 
             }
 
+        }
+
+        public static void CreateObjects()
+        {
+            List<string> lines = new List<string>();
+
+            using (var sr = new StreamReader(Path))
+            {
+                while (sr.Peek() >= 0)
+                    lines.Add(sr.ReadLine());
+            }
+            using (var sr = new StreamReader(Path1))
+            {
+                while (sr.Peek() >= 0)
+                    lines.Add(sr.ReadLine());
+            }
+            using (var sr = new StreamReader(Path2))
+            {
+                while (sr.Peek() >= 0)
+                    lines.Add(sr.ReadLine());
+            }
         }
         public class Person
         {
